@@ -1,0 +1,91 @@
+name: xonotic
+version: '0.8.2'
+summary: The Free and Fast Arena Shooter
+description: |
+ Xonotic is an addictive, arena-style first person shooter with crisp movement
+ and a wide array of weapons. It combines intuitive mechanics with in-your-face
+ action to elevate your heart rate. Xonotic is and will always be free-to-play.
+
+grade: stable
+confinement: strict
+
+apps:
+  dedicated:
+    command: desktop-launch $SNAP/Xonotic/xonotic-linux-dedicated.sh
+    plugs:
+      - network
+      - network-bind
+
+  xonotic:
+    command: desktop-launch $SNAP/Xonotic/xonotic-linux-sdl.sh
+    environment:
+      SDL_AUDIODRIVER: pulse
+    plugs:
+      - joystick
+      - network
+      - network-bind
+      - opengl
+      - optical-drive
+      - pulseaudio
+      - wayland
+      - x11
+
+parts:
+  xonotic:
+    plugin: dump
+    build-attributes:
+      - no-system-libraries
+    source: http://dl.xonotic.org/xonotic-$SNAPCRAFT_PROJECT_VERSION.zip
+    override-build: |
+      chmod +x Xonotic/xonotic-linux*.sh
+      cp Xonotic/xonotic-linux-glx.sh Xonotic/xonotic-linux-sdl.sh
+      cp Xonotic/xonotic-linux-glx.sh Xonotic/xonotic-linux-dedicated.sh
+      ARCHITECTURE=$(dpkg --print-architecture)
+      if [ "${ARCHITECTURE}" = "amd64" ]; then
+        rm Xonotic/xonotic-linux32*
+      elif [ "${ARCHITECTURE}" = "i386" ]; then
+        rm Xonotic/xonotic-linux64*
+      else
+        echo "ERROR! Xonotic only produces binaries for amd64 and i386. Failing the build here."
+        exit 1
+      fi
+      snapcraftctl build
+    after:
+      - desktop-glib-only
+    build-packages:
+      - dpkg
+    stage-packages:
+      - libasound2
+      - libbsd0
+      - libcurl3
+      - libgcc1
+      - libglu1-mesa
+      - libjpeg62
+      - libpulse0
+      - libsdl2-2.0-0
+      - libstdc++6
+      - libtxc-dxtn-s2tc0
+      - libvorbisfile3
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxdmcp6
+      - libxext6
+      - libxpm4
+      - libxxf86vm1
+      - zlib1g
+    prime:
+      - -Xonotic/Xonotic.app/
+      - -Xonotic/*.exe
+      - -Xonotic/bin32
+      - -Xonotic/bin64
+      - -Xonotic/Docs
+      - -Xonotic/misc
+      - -Xonotic/server/rcon2irc
+      - -Xonotic/source
+      - -Xonotic/xonotic-linux*-glx*
+      - -Xonotic/xonotic-osx-dedicated
+      - -usr/share/bug
+      - -usr/share/doc
+      - -usr/share/lintian
+      - -usr/share/man

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=2.5
+Encoding=UTF-8
+Name=Xonotic
+Comment=a free open-source first person shooter
+Icon=${SNAP}/meta/gui/xonotic.png
+Exec=xonotic
+Terminal=false
+StartupNotify=false
+Categories=Game;
