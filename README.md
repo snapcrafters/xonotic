@@ -9,11 +9,9 @@ distributions.</p>
 
 <p align="center">Published for <img src="http://anything.codes/slack-emoji-for-techies/emoji/tux.png" align="top" width="24" /> with :gift_heart: by Snapcrafters</p>
 
-<!--
 <p align="center">
-<a href="https://build.snapcraft.io/user/snapcrafters/spelunky"><img src="https://build.snapcraft.io/badge/snapcrafters/spelunky.svg" alt="Snap Status"></a>
+<a href="https://build.snapcraft.io/user/snapcrafters/xonotic"><img src="https://build.snapcraft.io/badge/snapcrafters/xonotic.svg" alt="Snap Status"></a>
 </p>
--->
 
 ## Install
 
