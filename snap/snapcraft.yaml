@@ -6,6 +6,7 @@ description: |
  and a wide array of weapons. It combines intuitive mechanics with in-your-face
  action to elevate your heart rate. Xonotic is and will always be free-to-play.
 
+base: core18
 grade: stable
 confinement: strict
 
@@ -35,10 +36,18 @@ apps:
       - x11
 
 parts:
+  desktop-glib-only:
+    build-packages:
+      - libglib2.0-dev
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: glib-only
+    stage-packages:
+      - libglib2.0-bin
+
   xonotic:
     plugin: dump
-    build-attributes:
-      - no-system-libraries
+    #build-attributes: [no-system-libraries]
     source: http://dl.xonotic.org/xonotic-$SNAPCRAFT_PROJECT_VERSION.zip
     override-build: |
       chmod +x Xonotic/xonotic-linux*.sh
@@ -68,7 +77,6 @@ parts:
       - libpulse0
       - libsdl2-2.0-0
       - libstdc++6
-      - libtxc-dxtn-s2tc0
       - libvorbisfile3
       - libx11-6
       - libxau6
