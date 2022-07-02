@@ -48,15 +48,6 @@ parts:
       chmod +x Xonotic/xonotic-linux*.sh
       cp Xonotic/xonotic-linux-glx.sh Xonotic/xonotic-linux-sdl.sh
       cp Xonotic/xonotic-linux-glx.sh Xonotic/xonotic-linux-dedicated.sh
-      ARCHITECTURE=$(dpkg --print-architecture)
-      if [ "${ARCHITECTURE}" = "amd64" ]; then
-        rm Xonotic/xonotic-linux32*
-      elif [ "${ARCHITECTURE}" = "i386" ]; then
-        rm Xonotic/xonotic-linux64*
-      else
-        echo "ERROR! Xonotic only produces binaries for amd64 and i386. Failing the build here."
-        exit 1
-      fi
       snapcraftctl build
     build-packages:
       - dpkg
