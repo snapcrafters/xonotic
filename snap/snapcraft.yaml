@@ -1,5 +1,5 @@
 name: xonotic
-version: '0.8.2'
+version: '0.8.5'
 summary: The Free and Fast Arena Shooter
 description: |
  Xonotic is an addictive, arena-style first person shooter with crisp movement
@@ -11,7 +11,6 @@ confinement: strict
 compression: lzo
 
 architectures:
-  - build-on: i386
   - build-on: amd64
 
 layout:
