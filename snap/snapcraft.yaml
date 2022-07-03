@@ -20,14 +20,14 @@ layout:
 apps:
   dedicated:
     extensions: [gnome-3-38]
-    command: Xonotic/xonotic-linux-dedicated.sh
+    command: Xonotic/xonotic-linux64-dedicated -basedir /snap/xonotic/current/Xonotic
     plugs:
       - network
       - network-bind
 
   xonotic:
     extensions: [gnome-3-38]
-    command: Xonotic/xonotic-linux-sdl.sh
+    command: Xonotic/xonotic-linux64-sdl -basedir /snap/xonotic/current/Xonotic
     environment:
       SDL_AUDIODRIVER: pulse
     plugs:
@@ -44,11 +44,6 @@ parts:
   xonotic:
     plugin: dump
     source: http://dl.xonotic.org/xonotic-$SNAPCRAFT_PROJECT_VERSION.zip
-    override-build: |
-      chmod +x Xonotic/xonotic-linux*.sh
-      cp Xonotic/xonotic-linux-glx.sh Xonotic/xonotic-linux-sdl.sh
-      cp Xonotic/xonotic-linux-glx.sh Xonotic/xonotic-linux-dedicated.sh
-      snapcraftctl build
     build-packages:
       - dpkg
     stage-packages:
