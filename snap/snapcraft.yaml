@@ -5,7 +5,7 @@ description: |
  Xonotic is an addictive, arena-style first person shooter with crisp movement
  and a wide array of weapons. It combines intuitive mechanics with in-your-face
  action to elevate your heart rate. Xonotic is and will always be free-to-play.
-base: core20
+base: core22
 grade: stable
 confinement: strict
 compression: lzo
@@ -19,14 +19,14 @@ layout:
 
 apps:
   dedicated:
-    extensions: [gnome-3-38]
+    extensions: [gnome]
     command: Xonotic/xonotic-linux64-dedicated -basedir /snap/xonotic/current/Xonotic
     plugs:
       - network
       - network-bind
 
   xonotic:
-    extensions: [gnome-3-38]
+    extensions: [gnome]
     command: Xonotic/xonotic-linux64-sdl -basedir /snap/xonotic/current/Xonotic
     environment:
       SDL_AUDIODRIVER: pulse
@@ -49,21 +49,14 @@ parts:
     stage-packages:
       - libasound2
       - libbsd0
-      - libcurl4
       - libgcc1
-      - libglu1-mesa
-      - libjpeg62
-      - libpulse0
       - libsdl2-2.0-0
       - libstdc++6
-      #- libtxc-dxtn-s2tc0
-      - libvorbisfile3
       - libx11-6
       - libxau6
       - libxcb1
       - libxdmcp6
       - libxext6
-      - libxpm4
       - libxxf86vm1
       - zlib1g
     prime:
