@@ -11,7 +11,8 @@ confinement: strict
 compression: lzo
 
 architectures:
-  - build-on: amd64
+  - amd64
+  - arm64
 
 layout:
   /usr/share/libdrm:
@@ -20,14 +21,14 @@ layout:
 apps:
   dedicated:
     extensions: [gnome]
-    command: Xonotic/xonotic-linux64-dedicated -basedir /snap/xonotic/current/Xonotic
+    command: Xonotic/xonotic-dedicated -basedir /snap/xonotic/current/Xonotic
     plugs:
       - network
       - network-bind
 
   xonotic:
     extensions: [gnome]
-    command: Xonotic/xonotic-linux64-sdl -basedir /snap/xonotic/current/Xonotic
+    command: Xonotic/xonotic-sdl -basedir /snap/xonotic/current/Xonotic
     environment:
       SDL_AUDIODRIVER: pulse
     plugs:
@@ -43,15 +44,27 @@ apps:
 parts:
   xonotic:
     plugin: dump
-    source: http://dl.xonotic.org/xonotic-$SNAPCRAFT_PROJECT_VERSION.zip
+    source: https://dl.xonotic.org/xonotic-$SNAPCRAFT_PROJECT_VERSION-source.zip
+    override-build: |
+      (cd Xonotic && make both)
+
+      install -Dm755 Xonotic/source/darkplaces/darkplaces-dedicated "$SNAPCRAFT_PART_INSTALL"/Xonotic/xonotic-dedicated
+      install -Dm755 Xonotic/source/darkplaces/darkplaces-sdl "$SNAPCRAFT_PART_INSTALL"/Xonotic/xonotic-sdl
+
+      (cd Xonotic/source/d0_blind_id && make DESTIR="$SNAPCRAFT_PART_INSTALL" install)
     build-packages:
-      - dpkg
+      - automake
+      - libtool
+      - libgmp-dev
+      - libjpeg-turbo8-dev
+      - libsdl2-dev
+      - libxpm-dev
+      - zlib1g-dev
     stage-packages:
       - libasound2
       - libbsd0
       - libgcc1
       - libsdl2-2.0-0
-      - libstdc++6
       - libx11-6
       - libxau6
       - libxcb1
@@ -59,6 +72,9 @@ parts:
       - libxext6
       - libxxf86vm1
       - zlib1g
+  xonotic-data:
+    plugin: dump
+    source: https://dl.xonotic.org/xonotic-$SNAPCRAFT_PROJECT_VERSION.zip
     prime:
       - -Xonotic/Xonotic.app/
       - -Xonotic/*.exe
@@ -68,7 +84,7 @@ parts:
       - -Xonotic/misc
       - -Xonotic/server/rcon2irc
       - -Xonotic/source
-      - -Xonotic/xonotic-linux*-glx*
+      - -Xonotic/xonotic-linux*
       - -Xonotic/xonotic-osx-dedicated
       - -usr/share/bug
       - -usr/share/doc
