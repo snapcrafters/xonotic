@@ -11,8 +11,8 @@ confinement: strict
 compression: lzo
 
 architectures:
-  - amd64
-  - arm64
+  - build-on: amd64
+  - build-on: arm64
 
 layout:
   /usr/share/libdrm:
