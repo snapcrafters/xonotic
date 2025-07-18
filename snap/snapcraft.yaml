@@ -5,14 +5,14 @@ description: |
  Xonotic is an addictive, arena-style first person shooter with crisp movement
  and a wide array of weapons. It combines intuitive mechanics with in-your-face
  action to elevate your heart rate. Xonotic is and will always be free-to-play.
-base: core22
+base: core24
 grade: stable
 confinement: strict
 compression: lzo
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
+platforms:
+  amd64:
+  arm64:
 
 layout:
   /usr/share/libdrm:
