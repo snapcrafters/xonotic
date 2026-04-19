@@ -51,7 +51,9 @@ parts:
       install -Dm755 Xonotic/source/darkplaces/darkplaces-dedicated "$SNAPCRAFT_PART_INSTALL"/Xonotic/xonotic-dedicated
       install -Dm755 Xonotic/source/darkplaces/darkplaces-sdl "$SNAPCRAFT_PART_INSTALL"/Xonotic/xonotic-sdl
 
-      (cd Xonotic/source/d0_blind_id && make DESTIR="$SNAPCRAFT_PART_INSTALL" install)
+      # Install d0_blind_id into /usr/lib inside the snap so libOSSlib.so is on
+      # the runtime library path after the core24 migration.
+      (cd Xonotic/source/d0_blind_id && make prefix=/usr DESTDIR="$SNAPCRAFT_PART_INSTALL" install)
     build-packages:
       - automake
       - libtool
