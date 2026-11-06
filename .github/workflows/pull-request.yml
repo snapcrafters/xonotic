@@ -1,10 +1,16 @@
-name: Build and smoke test snap
+name: Pull Request
 
 on:
-  push:
   pull_request:
-    branches: ["master"]
+    branches: ["**"]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -12,28 +18,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build snap
-        uses: snapcore/action-build@v1
-        id: build
+      - name: Build and review snap on amd64
+        uses: snapcrafters/ci/test-snap-build@main
 
       - name: Show Snapcraft log on build failure
         if: failure()
         run: cat /home/runner/.local/state/snapcraft/log/snapcraft*.log
 
-      - name: Review snap
-        uses: diddlesnaps/snapcraft-review-action@v1
-        with:
-          snap: ${{ steps.build.outputs.snap }}
-          isClassic: "false"
-
       - name: Upload snap artifact
         uses: actions/upload-artifact@v4
         with:
           name: xonotic-snap
-          path: ${{ steps.build.outputs.snap }}
+          path: "*.snap"
+          if-no-files-found: error
           retention-days: 7
 
   smoke-test:
@@ -74,6 +71,15 @@ jobs:
           VM_NAME=$(ghvmctl exec -- hostname | tr -d '\n')
           lxc file push "$SNAP_FILE" "local:${VM_NAME}/home/ubuntu/$(basename "$SNAP_FILE")"
           ghvmctl exec -- sudo snap install --dangerous "/home/ubuntu/$(basename "$SNAP_FILE")"
+
+      - name: Connect user data interface
+        run: ghvmctl exec -- sudo snap connect xonotic:dot-xonotic
+
+      - name: Check shared user data access
+        run: |
+          for app in xonotic xonotic.dedicated; do
+            ghvmctl exec -- snap run --shell "$app" -c 'set -eu; mkdir -p "$SNAP_REAL_HOME/.xonotic/data"; printf "%s\n" shared-data > "$SNAP_REAL_HOME/.xonotic/data/snap-smoke-test"; test "$(cat "$SNAP_REAL_HOME/.xonotic/data/snap-smoke-test")" = shared-data; rm "$SNAP_REAL_HOME/.xonotic/data/snap-smoke-test"'
+          done
 
       - name: Launch Xonotic
         run: |
