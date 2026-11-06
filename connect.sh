@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-if [ $(id -u) -ne 0 ]; then
-    echo "Root context required please."
+if (( EUID != 0 )); then
+    printf 'Run this script with sudo.\n' >&2
     exit 1
 fi
 
-for INTERFACE in joystick; do
-    snap connect xonotic:${INTERFACE}
-done
+snap connect xonotic:joystick
