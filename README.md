@@ -112,11 +112,6 @@ Release screenshots are gathered by the shared Snapcrafters CI workflow.
 
 Versions are checked daily against the official Xonotic download page.
 
-## Maintainers
-
-- [@popey](https://github.com/popey)
-- [@jnsgruk](https://github.com/jnsgruk)
-
 ## License
 
 The build files, scripts and documentation in this repository are released under the [GNU General Public License v3.0](LICENSE).
