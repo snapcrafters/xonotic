@@ -1,0 +1,36 @@
+name: Update
+
+on:
+  # Runs at 10:00 UTC every day
+  schedule:
+    - cron: '0 10 * * *'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: 🔄 Sync version with upstream
+    environment: "Candidate Branch"
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Sync version with upstream
+        uses: snapcrafters/ci/sync-version@main
+        with:
+          token: ${{ secrets.SNAPCRAFTERS_BOT_COMMIT }}
+          update-script: |
+            set -euo pipefail
+
+            VERSION=$(curl -fsSL --max-time 60 https://xonotic.org/download/ |
+              sed -nE 's|.*<h2>Download Xonotic ([0-9]+(\.[0-9]+)+)</h2>.*|\1|p')
+            [[ "$VERSION" =~ ^[0-9]+(\.[0-9]+)+$ && ${#VERSION} -le 128 ]]
+            [[ $(grep -c '^version: ' snap/snapcraft.yaml) -eq 1 ]]
+            CURRENT=$(yq -r '.version' snap/snapcraft.yaml)
+            [[ "$CURRENT" =~ ^[0-9]+(\.[0-9]+)+$ ]]
+
+            if [[ "$VERSION" != "$CURRENT" ]]; then
+              sed -i 's/^\(version: \).*$/\1'"$VERSION"'/' snap/snapcraft.yaml
+            fi

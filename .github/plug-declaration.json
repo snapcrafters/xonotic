@@ -1,0 +1,10 @@
+{
+    "personal-files": {
+        "allow-installation": {
+            "plug-names": ["dot-xonotic"],
+            "plug-attributes": {
+                "write": "\\$HOME/\\.xonotic"
+            }
+        }
+    }
+}
