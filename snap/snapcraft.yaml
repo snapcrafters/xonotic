@@ -18,20 +18,28 @@ layout:
   /usr/share/libdrm:
     bind: $SNAP/usr/share/libdrm
 
+plugs:
+  dot-xonotic:
+    interface: personal-files
+    write:
+      - $HOME/.xonotic
+
 apps:
   dedicated:
     extensions: [gnome]
-    command: Xonotic/xonotic-dedicated -basedir /snap/xonotic/current/Xonotic
+    command: Xonotic/xonotic-dedicated -basedir /snap/xonotic/current/Xonotic -userdir $SNAP_REAL_HOME/.xonotic
     plugs:
+      - dot-xonotic
       - network
       - network-bind
 
   xonotic:
     extensions: [gnome]
-    command: Xonotic/xonotic-sdl -basedir /snap/xonotic/current/Xonotic
+    command: Xonotic/xonotic-sdl -basedir /snap/xonotic/current/Xonotic -userdir $SNAP_REAL_HOME/.xonotic
     environment:
       SDL_AUDIODRIVER: pulse
     plugs:
+      - dot-xonotic
       - audio-playback
       - joystick
       - network

@@ -7,3 +7,4 @@ if (( EUID != 0 )); then
 fi
 
 snap connect xonotic:joystick
+snap connect xonotic:dot-xonotic
